@@ -46,7 +46,7 @@ def build_initial_model(configs, model: gp.Model, rod_size, chunk_sizes, demand,
     all_configs = range(0, len(configs))
 
     # generate decision variables: X_i tells, how many times config i is used or not
-    x = model.addVars(all_configs, name='x', vtype=GRB.INTEGER, lb=0, ub=num_rods)
+    x = model.addVars(all_configs, name='x', vtype=GRB.CONTINUOUS, lb=0, ub=num_rods)
 
     # C0: we externally assure that only valid configs are provided, so we don't need to check for every config,
     # whether it complies with the rodlength. :P
@@ -108,8 +108,8 @@ def solve():
     for v in m.getVars():
         print('%s %g' % (v.varName, v.x))
 
-    print("maus")
-
+    print("shadow costs:" + str(m.getAttr(GRB.Attr.Pi)))
+    
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
